@@ -47,16 +47,28 @@ module.exports.deleteOne = async (req, res, next) => {
     }
 };
 
+// module.exports.updateOne = async (req, res, next) => {
+//     try {
+//         const {body, params: {id}} = req;
+//         const result = await User.update(body, {
+//             where: {
+//                 id
+//             }
+//         });
+//         return res.status(200).send('User updated');
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+
 module.exports.updateOne = async (req, res, next) => {
     try {
         const {body, params: {id}} = req;
-        const result = await User.update(body, {
-            where: {
-                id
-            }
-        });
+        const foundedUser = await User.findByPk(id);
+        console.log(foundedUser);
+        const result = await foundedUser.update(body);
         return res.status(200).send('User updated');
     } catch (error) {
         next(error);
     }
-};
+}

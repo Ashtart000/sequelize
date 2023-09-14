@@ -1,21 +1,32 @@
-const { Task } = require('../models');
+const { Task, User } = require('../models');
 const NotFoundError = require('../errors/NotFoundError');
 const NotCreatedError = require('../errors/NotCreatedError');
 const NothingFoundError = require('../errors/NothingFoundError');
 
+// module.exports.createOneTask = async (req, res, next) => {
+//     try {
+//         const { body } = req;
+//         const createdTask = await Task.create(body);
+//         if(createdTask) {
+//             return res.status(201).send(createdTask);
+//         } else {
+//             throw new NotCreatedError();
+//         }
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+
 module.exports.createOneTask = async (req, res, next) => {
     try {
-        const { body } = req;
-        const createdTask = await Task.create(body);
-        if(createdTask) {
-            return res.status(201).send(createdTask);
-        } else {
-            throw new NotCreatedError();
-        }
+        const {body, params: {userId}} = req;
+        const user = await User.findByPk(userId);
+        const result = await user.createTask(body);
+        return res.status(201).send(result);
     } catch (error) {
         next(error);
     }
-};
+}
 
 module.exports.getOneTask = async (req, res, next) => {
     try {
