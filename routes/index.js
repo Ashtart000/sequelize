@@ -11,7 +11,8 @@ router.delete('/user/:id', UserController.deleteOne)
 router.put('/user/:id', UserController.updateOne);
 
 router.post('/task/:userId', TaskController.createOneTask);
-router.get('/tasks', TaskController.getAllTasks);
+router.get('/tasks/:userId', TaskController.getAllTasks);
+router.get('/tasks-count/:userId', TaskController.getCountOfTasks);
 router.get('/task/:id', TaskController.getOneTask);
 router.delete('/task/:id', TaskController.deleteOneTask);
 router.put('/task/:id', TaskController.updateOneTask);

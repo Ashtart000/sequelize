@@ -71,4 +71,5 @@ module.exports.updateOne = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-}
+};
+
