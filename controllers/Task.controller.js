@@ -17,26 +17,25 @@ const NothingFoundError = require('../errors/NothingFoundError');
 //     }
 // };
 
-module.exports.createOneTask = async (req, res, next) => {  // not magic
-    try {
-        const {body, params: {userId}} = req;
-        const createdTask = await Task.create({...body, userId});
-        return res.status(201).send(createdTask);
-    } catch (error) {
-        next(error);
-    }
-};
-
-// module.exports.createOneTask = async (req, res, next) => {
+// module.exports.createOneTask = async (req, res, next) => {  // not magic
 //     try {
 //         const {body, params: {userId}} = req;
-//         const user = await User.findByPk(userId);
-//         const result = await user.createTask(body);
-//         return res.status(201).send(result);
+//         const createdTask = await Task.create({...body, userId});
+//         return res.status(201).send(createdTask);
 //     } catch (error) {
 //         next(error);
 //     }
 // };
+
+module.exports.createOneTask = async (req, res, next) => {
+    try {
+        const {body, userInstance} = req;
+        const result = await userInstance.createTask(body);
+        return res.status(201).send(result);
+    } catch (error) {
+        next(error);
+    }
+};
 
 module.exports.getOneTask = async (req, res, next) => {
     try {
@@ -67,9 +66,8 @@ module.exports.getOneTask = async (req, res, next) => {
 
 module.exports.getAllTasks = async (req, res, next) => {
     try {
-        const {params: {userId}} = req;
-        const user = await User.findByPk(userId);
-        const result = await user.getTasks();
+        const {userInstance} = req;
+        const result = await userInstance.getTasks();
         return res.status(200).send(result);
     } catch (error) {
         next(error);

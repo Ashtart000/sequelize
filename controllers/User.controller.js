@@ -21,9 +21,8 @@ module.exports.findAll = async (req, res, next) => {
 
 module.exports.findByPk = async (req, res, next) => {
     try {
-        const {params: {id}} = req;
-        const findedUser = await User.findByPk(id);
-        return res.status(200).send(findedUser);
+        const { userInstance } = req;
+        return res.status(200).send(userInstance);
     } catch (error) {
         next(error);
     }
@@ -31,10 +30,10 @@ module.exports.findByPk = async (req, res, next) => {
 
 module.exports.deleteOne = async (req, res, next) => {
     try {
-        const {params: {id}} = req;
+        const {params: {userId}} = req;
         const deletedUser = await User.destroy({
             where: {
-                id
+                id: userId
             }
         });
         if(deletedUser > 0) {
@@ -63,10 +62,8 @@ module.exports.deleteOne = async (req, res, next) => {
 
 module.exports.updateOne = async (req, res, next) => {
     try {
-        const {body, params: {id}} = req;
-        const foundedUser = await User.findByPk(id);
-        console.log(foundedUser);
-        const result = await foundedUser.update(body);
+        const {body, userInstance} = req;
+        const result = await userInstance.update(body);
         return res.status(200).send('User updated');
     } catch (error) {
         next(error);
