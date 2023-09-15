@@ -1,4 +1,4 @@
-const GroupNotFound = require('../errors/GroupNotFound')
+const GroupNotFound = require('../errors/GroupNotFound');
 const { Group } = require('../models');
 
 module.exports.getGroupInstance = async (req, res, next) => {
@@ -8,7 +8,7 @@ module.exports.getGroupInstance = async (req, res, next) => {
         if(group) {
             req.groupInstance = group;
         } else {
-            throw new GroupNotFound();
+            throw new GroupNotFound;
         }
         next();
     } catch (error) {

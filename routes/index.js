@@ -22,10 +22,12 @@ router.delete('/task/:id', TaskController.deleteOneTask);
 router.put('/task/:id', TaskController.updateOneTask);
 
 // Group section
-router.get('/groups/:userId', getUserInstance, GroupController.getUsersGroups);
+router.get('/groups/:userId', getUserInstance, GroupController.getUserGroups);
 router.get('/group/:groupId', getGroupInstance, GroupController.getGroupUsers);
+router.get('/groups/user/:userId', getUserInstance, GroupController.countUserGroups);
+router.get('/groups/users/:groupId', getGroupInstance, GroupController.countGroupUsers);
 router.post('/groups', GroupController.createGroup);
-router.put('/groups/:userId/:groupId', getUserInstance, GroupController.addUserToGroup);
-router.delete('/groups/:userId/:groupId', getUserInstance, GroupController.removeUserFromGroup);
+router.put('/groups/:userId/:groupId', getUserInstance, getGroupInstance, GroupController.addUserToGroup);
+router.delete('/groups/:userId/:groupId', getUserInstance, getGroupInstance, GroupController.removeUserFromGroup);
 
 module.exports = router;
