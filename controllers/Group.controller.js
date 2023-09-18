@@ -43,8 +43,12 @@ module.exports.getUserGroups = async (req, res, next) => {
 module.exports.getGroupUsers = async (req, res, next) => {
     try {
         const {groupInstance} = req;
-        const result = await groupInstance.getUsers();
-        return res.status(200).send(result);
+        const result = await groupInstance.getUsers({
+            attributes: {
+                exclude: ['password']
+            }
+        });
+        return res.status(200).send({data: {groupInstance, result}});
     } catch (error) {
         next(error);
     }
@@ -69,3 +73,17 @@ module.exports.countGroupUsers = async (req, res, next) => {
         next(error);
     }
 };
+
+module.exports.setUsersToGroup = async (req, res, next) => {
+    try {
+        const {groupInstance} = req;
+        const result = await groupInstance.setUsers(userArray);
+        return res.status(200).send(result);
+    } catch (error) {
+        next(error);
+    }
+};
+
+const userArray = [
+    1, 4, 5, 6
+]

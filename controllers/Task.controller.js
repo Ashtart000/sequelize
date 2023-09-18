@@ -39,8 +39,8 @@ module.exports.createOneTask = async (req, res, next) => {
 
 module.exports.getOneTask = async (req, res, next) => {
     try {
-        const {params: {id}} = req;
-        const gettedTask = await Task.findByPk(id);
+        const {params: {taskId}} = req;
+        const gettedTask = await Task.findByPk(taskId);
         if(gettedTask) {
             return res.status(200).send(gettedTask);
         } else {
@@ -51,23 +51,28 @@ module.exports.getOneTask = async (req, res, next) => {
     }
 };
 
-// module.exports.getAllTasks = async (req, res, next) => {
-//     try {
-//         const allTasks = await Task.findAll();
-//         if(allTasks.length > 0) {
-//             return res.status(200).send(allTasks);
-//         } else {
-//             throw new NothingFoundError();
-//         }
-//     } catch (error) {
-//         next(error);
-//     }
-// };
-
 module.exports.getAllTasks = async (req, res, next) => {
     try {
-        const {userInstance} = req;
-        const result = await userInstance.getTasks();
+        const { pagination } = req;
+        const allTasks = await Task.findAll({
+            ...pagination
+        });
+        if(allTasks.length > 0) {
+            return res.status(200).send(allTasks);
+        } else {
+            throw new NothingFoundError();
+        }
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports.getAllUserTasks = async (req, res, next) => {
+    try {
+        const {userInstance, pagination} = req;
+        const result = await userInstance.getTasks({
+            ...pagination
+        });
         return res.status(200).send(result);
     } catch (error) {
         next(error);
@@ -101,11 +106,11 @@ module.exports.getCountOfTasks = async (req, res, next) => {    // not magic met
 
 module.exports.updateOneTask = async (req, res, next) => {
     try {
-        const {body, params: {id}} = req;
+        const {body, params: {taskId}} = req;
         console.log(req);
         const updatedTask = await Task.update(body, {
             where: {
-                id
+                id: taskId
             }
         });
         if (updatedTask > 0) {
@@ -120,10 +125,10 @@ module.exports.updateOneTask = async (req, res, next) => {
 
 module.exports.deleteOneTask = async (req, res, next) => {
     try {
-        const {params: {id}} = req;
+        const {params: {taskId}} = req;
         const deletedTask = await Task.destroy({
             where: {
-                id
+                id: taskId
             }
         });
         if (deletedTask > 0) {
