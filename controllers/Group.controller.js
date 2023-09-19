@@ -1,14 +1,14 @@
-const { Group } = require('../models');
+const { Group, User } = require('../models');
 
-module.exports.createGroup = async (req, res, next) => {
-    try {
-        const { body } = req;
-        const createdGroup = await Group.create(body);
-        return res.status(201).send(createdGroup);
-    } catch (error) {
-        next(error);
-    }
-}
+// module.exports.createGroup = async (req, res, next) => {
+//     try {
+//         const { body } = req;
+//         const createdGroup = await Group.create(body);
+//         return res.status(201).send(createdGroup);
+//     } catch (error) {
+//         next(error);
+//     }
+// }
 
 module.exports.addUserToGroup = async (req, res, next) => {
     try {
@@ -40,19 +40,44 @@ module.exports.getUserGroups = async (req, res, next) => {
     }
 };
 
+// module.exports.getGroupUsers = async (req, res, next) => {
+//     try {
+//         const {groupInstance} = req;
+//         const result = await groupInstance.getUsers({
+//             attributes: {
+//                 exclude: ['password']
+//             }
+//         });
+//         return res.status(200).send({data: {groupInstance, result}});
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+
 module.exports.getGroupUsers = async (req, res, next) => {
     try {
-        const {groupInstance} = req;
-        const result = await groupInstance.getUsers({
-            attributes: {
-                exclude: ['password']
-            }
+        const {params: {groupId}} = req;
+
+        const groupWithUsers = await Group.findAll({
+            where: {
+                id: groupId
+            },
+            include: [{
+                model: User,
+                attributes: {
+                    exclude: ['password']
+                },
+                through: {
+                    attributes: []
+                }
+            }] 
         });
-        return res.status(200).send({data: {groupInstance, result}});
+
+        return res.status(200).send(groupWithUsers);
     } catch (error) {
         next(error);
     }
-};
+}
 
 module.exports.countUserGroups = async (req, res, next) => {
     try {
@@ -86,4 +111,51 @@ module.exports.setUsersToGroup = async (req, res, next) => {
 
 const userArray = [
     1, 4, 5, 6
-]
+];
+
+
+
+module.exports.createGroupImage = async (req, res, next) => {
+    try {
+        const { params: {groupId}, file: {filename}} = req;
+        const [rowCount, [updatedGroup]] = await Group.update({
+            imagePath: filename
+        }, {
+            where: {
+                id: groupId
+            },
+            returning: true
+        })
+        return res.send(updatedGroup);
+    } catch (error) {
+        next(error);
+    }
+}
+
+module.exports.createGroup = async (req, res, next) => {
+    try {
+        const { body, file: {filename} } = req;
+        const createdGroup = await Group.create({...body, imagePath: filename});
+        return res.status(201).send(createdGroup);
+    } catch (error) {
+        next(error);
+    }
+}
+
+module.exports.deleteGroup = async (req, res, next) => {
+    try {
+        const { params: {groupId} } = req;
+        const deletedGroup = await Group.destroy({
+            where: {
+                id: groupId
+            }
+        });
+        if(deletedGroup > 0) {
+            return res.send('Succesfull delete!'); 
+        } else {
+            return res.send('Such group does not exist!'); 
+        }    
+    } catch (error) {
+        next (error);
+    }
+}
