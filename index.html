@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="http://localhost:5000/api/groups/2" method="post" enctype="multipart/form-data">
+        <input type="file" name="groupAvatar">
+        <button type="submit">Send</button>
+    </form>
+
+    <form action="http://localhost:5000/api/groups/" method="post" enctype="multipart/form-data">
+        <input type="file" name="groupAvatar">
+        <input type="text" name="name" placeholder="Введіть назву групи">
+        <input type="text" name="description" placeholder="Введіть опис групи">
+        <button type="submit">Send</button>
+    </form>
+</body>
+</html>
