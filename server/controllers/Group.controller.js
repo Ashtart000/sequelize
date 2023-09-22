@@ -159,3 +159,15 @@ module.exports.deleteGroup = async (req, res, next) => {
         next (error);
     }
 }
+
+module.exports.getAllGroups = async (req, res, next) => {
+    try {
+        const { pagination } = req;
+        const allGroups = await Group.findAll({
+            ...pagination
+        });
+        return res.status(200).send(allGroups);
+    } catch (error) {
+        next(error);
+    }
+}

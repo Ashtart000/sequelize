@@ -2,6 +2,7 @@ const { Router } = require('express');
 const GroupController = require('../controllers/Group.controller');
 const { getGroupInstance } = require('../middlewares/group.mw');
 const { getUserInstance } = require('../middlewares/user.mw');
+const pagination = require('../middlewares/pagination.mw');
 const multer = require('multer');
 const path = require('path');
 const { STATIC_PATH } = require('../config/path.config');
@@ -21,6 +22,7 @@ const upload = multer({ storage }) // storage: storage
 
 const groupsRouter = Router();
 
+groupsRouter.get('/', pagination, GroupController.getAllGroups);
 groupsRouter.get('/:userId', getUserInstance, GroupController.getUserGroups);
 groupsRouter.get('/get-users/:groupId', getGroupInstance, GroupController.getGroupUsers);
 groupsRouter.get('/user/:userId', getUserInstance, GroupController.countUserGroups);

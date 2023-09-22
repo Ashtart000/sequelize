@@ -1,8 +1,13 @@
+import GroupList from "./GroupList/GroupList";
+import UserList from "./UserList/UserList";
+
 function App() {
   return (
-    <h1>
-      Remember FRONTEND
-    </h1>
+    <>
+      <UserList />
+      <GroupList />
+    </>
+    
   );
 }
 

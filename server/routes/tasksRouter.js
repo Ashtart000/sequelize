@@ -8,7 +8,7 @@ const tasksRouter = Router();
 
 tasksRouter.post('/:userId', validateTask, getUserInstance, TaskController.createOneTask);
 tasksRouter.get('/', pagination, TaskController.getAllTasks);
-tasksRouter.get('/:userId', getUserInstance, pagination, TaskController.getAllUserTasks);
+tasksRouter.get('/:userId', pagination, getUserInstance, TaskController.getAllUserTasks);
 tasksRouter.get('/count/:userId', TaskController.getCountOfTasks);
 tasksRouter.get('/:taskId', TaskController.getOneTask);
 tasksRouter.delete('/:taskId', TaskController.deleteOneTask);
