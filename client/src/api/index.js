@@ -35,15 +35,12 @@ export const getAllGroups = async (pageNumber) => {
     return data;
 }
 
-export const createGroup = async (groupData) => {
+export const createGroup = async (formData) => {
     const url = 'http://localhost:5000/api/groups/wi';
 
     const requestOptions = {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(groupData)
+        body: formData
     }
 
     const response = await fetch(url, requestOptions);
