@@ -22,6 +22,7 @@ const AddGroupFromModal = (props) => {
         console.log(serverResponce);
         actions.resetForm();
         props.setIsModalOpen(false);
+        await props.loadGroups(props.page);
     }
 
     return (

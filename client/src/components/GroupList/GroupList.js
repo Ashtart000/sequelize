@@ -71,11 +71,15 @@ const GroupList = () => {
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 selectedGroup={selectedGroup}
+                loadGroups={loadGroups}
+                page={page}
             />
 
             <AddGroupFromModal
                 isModalOpen={isModalAddOpen}
                 setIsModalOpen={setIsModalAddOpen}
+                loadGroups={loadGroups}
+                page={page}
             />
         </>
     );
