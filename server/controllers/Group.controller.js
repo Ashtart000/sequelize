@@ -142,6 +142,16 @@ module.exports.createGroup = async (req, res, next) => {
     }
 }
 
+module.exports.createGroupWi = async (req, res, next) => {
+    try {
+        const { body } = req;
+        const createdGroup = await Group.create(body);
+        return res.status(201).send(createdGroup);
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports.deleteGroup = async (req, res, next) => {
     try {
         const { params: {groupId} } = req;

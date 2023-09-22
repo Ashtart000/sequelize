@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getAllGroups } from '../../api';
 import GroupCard from './GroupCard';
 import GroupCardModal from './GroupCardModal';
-// import AddGroupFromModal from './AddGroupFromModal';
+import AddGroupFromModal from './AddGroupFromModal';
 
 const GroupList = () => {
     const [groups, setGroups] = useState([]);
@@ -73,10 +73,10 @@ const GroupList = () => {
                 selectedGroup={selectedGroup}
             />
 
-            {/* <AddGroupFromModal
+            <AddGroupFromModal
                 isModalOpen={isModalAddOpen}
                 setIsModalOpen={setIsModalAddOpen}
-            /> */}
+            />
         </>
     );
 }

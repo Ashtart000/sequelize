@@ -28,6 +28,8 @@ groupsRouter.get('/get-users/:groupId', getGroupInstance, GroupController.getGro
 groupsRouter.get('/user/:userId', getUserInstance, GroupController.countUserGroups);
 groupsRouter.get('/users/:groupId', getGroupInstance, GroupController.countGroupUsers);
 groupsRouter.post('/', upload.single('groupAvatar'), GroupController.createGroup);
+groupsRouter.post('/wi', GroupController.createGroupWi);
+
 groupsRouter.put('/:userId/:groupId', getUserInstance, getGroupInstance, GroupController.addUserToGroup);
 groupsRouter.delete('/:userId/:groupId', getUserInstance, getGroupInstance, GroupController.removeUserFromGroup);
 groupsRouter.delete('/:groupId', GroupController.deleteGroup);
