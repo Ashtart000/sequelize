@@ -36,7 +36,7 @@ export const getAllGroups = async (pageNumber) => {
 }
 
 export const createGroup = async (formData) => {
-    const url = 'http://localhost:5000/api/groups/wi';
+    const url = 'http://localhost:5000/api/groups/';
 
     const requestOptions = {
         method: 'POST',
@@ -57,6 +57,27 @@ export const createGroupImage = async (image, groupId) => {
     }
 
     const response = await fetch(url, requestOptions);
+    const data = await response.json();
+    return data;
+}
+
+export const deleteGroup = async (groupId) => {
+    const url = `http://localhost:5000/api/groups/${groupId}`;
+
+    const requestOptions = {
+        method: 'DELETE',
+        body: JSON.stringify(groupId)
+    }
+
+    const response = await fetch(url, requestOptions);
+    const data = await response.json();
+    return data;
+}
+
+export const showGroupUsers = async (groupId) => {
+    const url = `http://localhost:5000/api/groups/get-users/${groupId}`;
+
+    const response = await fetch(url);
     const data = await response.json();
     return data;
 }

@@ -1,6 +1,8 @@
+import React, { useState } from 'react'; 
 import Modal from 'react-modal';
 import { Formik, Form } from 'formik';
-import { createGroupImage } from '../../api'
+import { createGroupImage, deleteGroup, showGroupUsers } from '../../api'
+import ShowGroupUsersCard from './ShowGroupsUsersCard';
 
 Modal.setAppElement('#root');
 
@@ -12,11 +14,46 @@ const customStyles = {
 
 const GroupCardModal = (props) => {
     const {selectedGroup} = props;
+    const [groupUsers, setGroupUsers] = useState([]);
+    const [showUsersToggle, setShowUsersToggle] = useState(false);
+
+    const deleteBtnHandler = async () => {
+        try {
+            const serverResponse = await deleteGroup(selectedGroup.id);
+            props.setIsModalOpen(false);
+            await props.loadGroups(props.page);
+        } catch (error) {
+            console.error(error);
+        }      
+    }
+
+    const showUsers = async () => {
+        try {
+            if(showUsersToggle) {
+                setGroupUsers([]);
+                setShowUsersToggle(false);
+            } else {
+                const groupUsersData = await showGroupUsers(selectedGroup.id);
+                console.log(groupUsersData);
+                setGroupUsers(groupUsersData);
+                setShowUsersToggle(true);
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const addUserToGroupHandler = async () => {
+
+    }
 
     return (
         <Modal
                 isOpen={props.isModalOpen}
-                onRequestClose={() => {props.setIsModalOpen(false)}}
+                onRequestClose={() => {
+                    props.setIsModalOpen(false); 
+                    setGroupUsers([])
+                }}
                 style={customStyles}
             >
                 {props.selectedGroup &&(
@@ -26,6 +63,7 @@ const GroupCardModal = (props) => {
                         alt={selectedGroup.name}
                         style={{width: '200px', height: '200px'}} 
                     />
+                    <button style={{display: 'block'}} onClick={deleteBtnHandler}>Delete group</button>
                     <h2>{selectedGroup.name}</h2>
                     <div>Set new image</div>
                     <Formik 
@@ -73,7 +111,24 @@ const GroupCardModal = (props) => {
                     <p>description: {selectedGroup.description}</p>
                     <p>Created At: {selectedGroup.createdAt}</p>
                     <p>Updated At: {selectedGroup.updatedAt}</p>
-                    <button onClick={() => props.setIsModalOpen(false)}>Close</button>
+                    <div className='groups-users-btn'>
+                        <button onClick={showUsers}>
+                            {showUsersToggle ? 'Hide group\'s users' : 'Show group\'s users'}
+                        </button>
+                        <button onClick={addUserToGroupHandler}>Add user to group</button>
+                    </div>
+                    <section style={{
+                        height: groupUsers.length > 0 ? '160px' : '0px',
+                        overflowY: 'auto' 
+                    }}>
+                        {groupUsers.map((user) => (
+                            <ShowGroupUsersCard
+                            user={user}
+                            key={user.id}
+                            />
+                        ))}
+                    </section>                    
+                    <button style={{marginTop: '15px'}} onClick={() => props.setIsModalOpen(false)}>Close window</button>
                 </div>
                 )}
         </Modal>

@@ -40,44 +40,45 @@ module.exports.getUserGroups = async (req, res, next) => {
     }
 };
 
-// module.exports.getGroupUsers = async (req, res, next) => {
-//     try {
-//         const {groupInstance} = req;
-//         const result = await groupInstance.getUsers({
-//             attributes: {
-//                 exclude: ['password']
-//             }
-//         });
-//         return res.status(200).send({data: {groupInstance, result}});
-//     } catch (error) {
-//         next(error);
-//     }
-// };
-
 module.exports.getGroupUsers = async (req, res, next) => {
     try {
-        const {params: {groupId}} = req;
-
-        const groupWithUsers = await Group.findAll({
-            where: {
-                id: groupId
-            },
-            include: [{
-                model: User,
-                attributes: {
-                    exclude: ['password']
-                },
-                through: {
-                    attributes: []
-                }
-            }] 
+        const {groupInstance} = req;
+        const result = await groupInstance.getUsers({
+            attributes: {
+                exclude: ['password']
+            }
         });
-
-        return res.status(200).send(groupWithUsers);
+        // return res.status(200).send({data: {groupInstance, result}});
+        return res.status(200).send(result);
     } catch (error) {
         next(error);
     }
-}
+};
+
+// module.exports.getGroupUsers = async (req, res, next) => {
+//     try {
+//         const {params: {groupId}} = req;
+
+//         const groupWithUsers = await Group.findAll({
+//             where: {
+//                 id: groupId
+//             },
+//             include: [{
+//                 model: User,
+//                 attributes: {
+//                     exclude: ['password']
+//                 },
+//                 through: {
+//                     attributes: []
+//                 }
+//             }] 
+//         });
+
+//         return res.status(200).send(groupWithUsers);
+//     } catch (error) {
+//         next(error);
+//     }
+// }
 
 module.exports.countUserGroups = async (req, res, next) => {
     try {
@@ -142,16 +143,6 @@ module.exports.createGroup = async (req, res, next) => {
     }
 }
 
-module.exports.createGroupWi = async (req, res, next) => {
-    try {
-        const { body } = req;
-        const createdGroup = await Group.create(body);
-        return res.status(201).send(createdGroup);
-    } catch (error) {
-        next(error);
-    }
-}
-
 module.exports.deleteGroup = async (req, res, next) => {
     try {
         const { params: {groupId} } = req;
@@ -161,9 +152,9 @@ module.exports.deleteGroup = async (req, res, next) => {
             }
         });
         if(deletedGroup > 0) {
-            return res.send('Succesfull delete!'); 
+            return res.status(200).json({ message: 'Succesfull delete!' });
         } else {
-            return res.send('Such group does not exist!'); 
+            return res.status(404).json({ message: 'Such group does not exist!' });
         }    
     } catch (error) {
         next (error);

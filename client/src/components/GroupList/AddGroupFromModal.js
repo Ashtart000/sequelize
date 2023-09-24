@@ -19,22 +19,22 @@ const initialState = {
 const AddGroupFromModal = (props) => {
 
     const handleSubmitToFormik = async (values, actions) => {
-        // const serverResponce = await createGroup(values);
-        // console.log(serverResponce);
-        // actions.resetForm();
-        // props.setIsModalOpen(false);
-        // await props.loadGroups(props.page);
         const { setSubmitting } = actions;
         const formData = new FormData();
         values.groupAvatar.forEach((file) => {
             formData.append("groupAvatar", file)
         });
-        values.groupAvatar.forEach((name) => {
-            formData.append("name", values.name)
-        });
-        values.groupAvatar.forEach((description) => {
-            formData.append("description", values.description)
-        });
+        // values.groupAvatar.forEach((name) => {
+        //     formData.append("name", values.name)
+        // });
+        // values.groupAvatar.forEach((description) => {
+        //     formData.append("description", values.description)
+        // });
+        for (const key in values) {
+            if (key !== "groupAvatar") {
+                formData.append(key, values[key]);
+            }
+        }
         
         console.log(...formData)
 
