@@ -43,8 +43,43 @@ const GroupCardModal = (props) => {
         }
     }
 
+    const renderGroupUsers = () => {
+        return groupUsers.map((user) => (
+            <ShowGroupUsersCard
+            user={user}
+            key={user.id}
+            />
+        ))
+    }
+
+    const resetGroupUsers = () => {
+        setGroupUsers([]);
+        setShowUsersToggle(false);
+    }
+
     const addUserToGroupHandler = async () => {
 
+    }
+
+    const setImageHandler = async (values, actions) => {
+        const { setSubmitting } = actions;
+        const formData = new FormData();
+        values.groupAvatar.forEach((file) => {
+            formData.append("groupAvatar", file)
+        })
+        
+        console.log(...formData)
+
+        try {
+            const serverResponse = await createGroupImage(formData, selectedGroup.id);
+            console.log(serverResponse);
+            props.setIsModalOpen(false);
+            await props.loadGroups(props.page);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setSubmitting(false);
+        }
     }
 
     return (
@@ -52,7 +87,7 @@ const GroupCardModal = (props) => {
                 isOpen={props.isModalOpen}
                 onRequestClose={() => {
                     props.setIsModalOpen(false); 
-                    setGroupUsers([])
+                    resetGroupUsers();
                 }}
                 style={customStyles}
             >
@@ -68,26 +103,7 @@ const GroupCardModal = (props) => {
                     <div>Set new image</div>
                     <Formik 
                         initialValues={{groupAvatar: []}}
-                        onSubmit={ async (values, actions) => {
-                            const { setSubmitting } = actions;
-                            const formData = new FormData();
-                            values.groupAvatar.forEach((file) => {
-                                formData.append("groupAvatar", file)
-                            })
-                            
-                            console.log(...formData)
-
-                            try {
-                                const serverResponse = await createGroupImage(formData, selectedGroup.id);
-                                console.log(serverResponse);
-                                props.setIsModalOpen(false);
-                                await props.loadGroups(props.page);
-                            } catch (error) {
-                                console.error(error);
-                            } finally {
-                                setSubmitting(false);
-                            }
-                        }}
+                        onSubmit={setImageHandler}
                     >
                         {({isSubmitting, setFieldValue}) => (
                             <Form>
@@ -108,7 +124,7 @@ const GroupCardModal = (props) => {
 
 
                     <p>id: {selectedGroup.id}</p>
-                    <p>description: {selectedGroup.description}</p>
+                    <h3>description: {selectedGroup.description}</h3>
                     <p>Created At: {selectedGroup.createdAt}</p>
                     <p>Updated At: {selectedGroup.updatedAt}</p>
                     <div className='groups-users-btn'>
@@ -121,14 +137,12 @@ const GroupCardModal = (props) => {
                         height: groupUsers.length > 0 ? '160px' : '0px',
                         overflowY: 'auto' 
                     }}>
-                        {groupUsers.map((user) => (
-                            <ShowGroupUsersCard
-                            user={user}
-                            key={user.id}
-                            />
-                        ))}
+                        {groupUsers.length > 0 ? renderGroupUsers() : null}
                     </section>                    
-                    <button style={{marginTop: '15px'}} onClick={() => props.setIsModalOpen(false)}>Close window</button>
+                    <button 
+                        style={{marginTop: '15px'}} 
+                        onClick={() => props.setIsModalOpen(false)}
+                        >Close window</button>
                 </div>
                 )}
         </Modal>
