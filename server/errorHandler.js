@@ -2,7 +2,7 @@ const NotCreatedError = require('./errors/NotCreatedError');
 const NotFoundError = require('./errors/NotFoundError');
 const NothingFoundError = require('./errors/NothingFoundError');
 const { ValidationError } = require('yup');
-const UserNotFound = require('./errors/UserNotFound');
+const UserNotFoundError = require('./errors/UserNotFoundError');
 const GroupNotFound = require('./errors/GroupNotFound');
 
 
@@ -19,7 +19,7 @@ module.exports.basicErrorHandler = (err, req, res, next) => {
     if(err instanceof ValidationError) {
         return res.status(400).send(err.message);
     }
-    if(err instanceof UserNotFound) {
+    if(err instanceof UserNotFoundError) {
         return res.status(404).send(err.message);
     }
     if(err instanceof GroupNotFound) {

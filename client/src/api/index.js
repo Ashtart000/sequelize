@@ -81,3 +81,21 @@ export const showGroupUsers = async (groupId) => {
     const data = await response.json();
     return data;
 }
+
+export const addUserToGroup = async (userId, groupId) => {
+    try {
+        const url = `http://localhost:5000/api/groups/${userId}/${groupId}`;
+
+        const requestOptions = {
+        method: 'PUT',
+        body: JSON.stringify(userId, groupId)
+    }
+
+        const response = await fetch(url, requestOptions);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.log(error)
+    }
+
+}

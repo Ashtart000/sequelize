@@ -1,3 +1,4 @@
+const UserNotFoundError = require('../errors/UserNotFoundError');
 const { Group, User } = require('../models');
 
 // module.exports.createGroup = async (req, res, next) => {
@@ -14,7 +15,12 @@ module.exports.addUserToGroup = async (req, res, next) => {
     try {
         const { userInstance, groupInstance } = req;
         const result = await groupInstance.addUser(userInstance);
-        return res.status(200).send('User successfully added to group');
+        if(userInstance) {
+            return res.status(200).json({message: 'User successfully added to group'});
+        } else {
+            throw new UserNotFoundError();
+        }
+        
     } catch (error) {
         next(error);
     }
@@ -24,7 +30,7 @@ module.exports.removeUserFromGroup = async (req, res, next) => {
     try {
         const { userInstance, groupInstance } = req;
         const result = await groupInstance.removeUser(userInstance);
-        return res.status(200).send('User successfully deleted from group');
+        return res.status(200).json({message: 'User successfully deleted from group'});
     } catch (error) {
         next(error);
     }

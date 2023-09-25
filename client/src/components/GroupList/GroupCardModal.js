@@ -3,9 +3,9 @@ import Modal from 'react-modal';
 import { Formik, Form } from 'formik';
 import { createGroupImage, deleteGroup, showGroupUsers } from '../../api'
 import ShowGroupUsersCard from './ShowGroupsUsersCard';
+import AddUserToGroupModal from './AddUserToGroupModal';
 
 Modal.setAppElement('#root');
-
 
 const customStyles = {
     content: {
@@ -16,6 +16,8 @@ const GroupCardModal = (props) => {
     const {selectedGroup} = props;
     const [groupUsers, setGroupUsers] = useState([]);
     const [showUsersToggle, setShowUsersToggle] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [isModalAddUserOpen, setIsModalAddUserOpen] = useState(false);
 
     const deleteBtnHandler = async () => {
         try {
@@ -57,7 +59,7 @@ const GroupCardModal = (props) => {
         setShowUsersToggle(false);
     }
 
-    const addUserToGroupHandler = async () => {
+    const addUserToGroup = async () => {
 
     }
 
@@ -131,7 +133,7 @@ const GroupCardModal = (props) => {
                         <button onClick={showUsers}>
                             {showUsersToggle ? 'Hide group\'s users' : 'Show group\'s users'}
                         </button>
-                        <button onClick={addUserToGroupHandler}>Add user to group</button>
+                        <button onClick={() => setIsModalAddUserOpen(true)}>Add user to group</button>
                     </div>
                     <section style={{
                         height: groupUsers.length > 0 ? '160px' : '0px',
@@ -142,7 +144,14 @@ const GroupCardModal = (props) => {
                     <button 
                         style={{marginTop: '15px'}} 
                         onClick={() => props.setIsModalOpen(false)}
-                        >Close window</button>
+                        >Close window
+                    </button>
+
+                    <AddUserToGroupModal
+                    isModalOpen={isModalAddUserOpen}
+                    setIsModalOpen={setIsModalAddUserOpen}
+                    selectedGroup={selectedGroup}
+                    />
                 </div>
                 )}
         </Modal>

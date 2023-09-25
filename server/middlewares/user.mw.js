@@ -1,4 +1,4 @@
-const UserNotFound = require('../errors/UserNotFound');
+const UserNotFoundError = require('../errors/UserNotFoundError');
 const { User } = require('../models');
 const { USER_SCHEMA } = require('../schemas/user.schema');
 
@@ -13,7 +13,7 @@ module.exports.getUserInstance = async (req, res, next) => {
         if(user) {
             req.userInstance = user;
         } else {
-            throw new UserNotFound();
+            throw new UserNotFoundError();
         }
         next();
     } catch (error) {
