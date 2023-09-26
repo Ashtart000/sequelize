@@ -60,8 +60,14 @@ module.exports = (sequelize, DataTypes) => {
         // }
       }
     },
-    gender: DataTypes.STRING
-  }, {
+    gender: DataTypes.STRING,
+    userRole: {
+      field: 'user_role',
+      type: DataTypes.ENUM('user', 'admin'), // Використовуємо ENUM для обмеження можливих значень
+      defaultValue: 'user' // Значення за замовчуванням
+    },
+  }, 
+  {
     sequelize,
     modelName: 'User',
     tableName: 'users',
