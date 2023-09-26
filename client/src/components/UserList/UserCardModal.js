@@ -22,6 +22,7 @@ const UserCardModal = (props) => {
                     alt={selectedUser.lastName} 
                     />
                     <h2>{selectedUser.firstName} {selectedUser.lastName}</h2>
+                    <p>ID: {selectedUser.id}</p>
                     <p>Email: {selectedUser.email}</p>
                     <p>Birthday: {selectedUser.birthday}</p>
                     <p>Created At: {selectedUser.createdAt}</p>

@@ -4,6 +4,7 @@ import { Formik, Form } from 'formik';
 import { createGroupImage, deleteGroup, showGroupUsers } from '../../api'
 import ShowGroupUsersCard from './ShowGroupsUsersCard';
 import AddUserToGroupModal from './AddUserToGroupModal';
+import UserCardModal from '../UserList/UserCardModal';
 
 Modal.setAppElement('#root');
 
@@ -18,6 +19,7 @@ const GroupCardModal = (props) => {
     const [showUsersToggle, setShowUsersToggle] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
     const [isModalAddUserOpen, setIsModalAddUserOpen] = useState(false);
+    const [isModalAboutUserOpen, setIsModalAboutUserOpen] = useState(false);
 
     const deleteBtnHandler = async () => {
         try {
@@ -50,6 +52,11 @@ const GroupCardModal = (props) => {
             <ShowGroupUsersCard
             user={user}
             key={user.id}
+            group={props.selectedGroup}
+            onClick={() => { // це не обробник, це пропс
+                setSelectedUser(user)
+                setIsModalAboutUserOpen(true)
+            }}
             />
         ))
     }
@@ -57,10 +64,6 @@ const GroupCardModal = (props) => {
     const resetGroupUsers = () => {
         setGroupUsers([]);
         setShowUsersToggle(false);
-    }
-
-    const addUserToGroup = async () => {
-
     }
 
     const setImageHandler = async (values, actions) => {
@@ -147,10 +150,17 @@ const GroupCardModal = (props) => {
                         >Close window
                     </button>
 
+                    <UserCardModal
+                    isModalOpen={isModalAboutUserOpen}
+                    setIsModalOpen={setIsModalAboutUserOpen}
+                    selectedUser={selectedUser}
+                    />
+
                     <AddUserToGroupModal
                     isModalOpen={isModalAddUserOpen}
                     setIsModalOpen={setIsModalAddUserOpen}
                     selectedGroup={selectedGroup}
+                    resetGroupUsers={resetGroupUsers}
                     />
                 </div>
                 )}

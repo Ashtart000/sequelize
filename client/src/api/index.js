@@ -99,3 +99,17 @@ export const addUserToGroup = async (userId, groupId) => {
     }
 
 }
+
+
+export const removeUserFromGroup = async (userId, groupId) => {
+    const url = `http://localhost:5000/api/groups/${userId}/${groupId}`;
+
+    const requestOptions = {
+        method: 'DELETE',
+        body: JSON.stringify({userId, groupId})
+    }
+
+    const response = await fetch(url, requestOptions);
+    const data = await response.json();
+    return data;
+}

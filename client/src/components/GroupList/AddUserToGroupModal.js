@@ -25,6 +25,7 @@ const AddUserToGroupModal = (props) => {
             if(serverResponce.message) {
                 actions.resetForm();
                 props.setIsModalOpen(false);
+                props.resetGroupUsers();
             } else {
                 setUserNotFoundError(serverResponce.error);
             }
