@@ -26,6 +26,6 @@ module.exports.basicErrorHandler = (err, req, res, next) => {
         return res.status(404).send(err.message);
     }
     else {
-        return res.status(500).send('Something wrong');
+        return res.status(500).send(err.message);
     }
 }

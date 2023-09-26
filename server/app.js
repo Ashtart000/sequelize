@@ -16,6 +16,6 @@ app.use(express.static(STATIC_PATH));
 
 app.use('/api', router);
 
-// app.use(basicErrorHandler);
+app.use(basicErrorHandler);
 
 module.exports = app;

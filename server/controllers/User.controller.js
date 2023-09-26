@@ -1,8 +1,14 @@
 const { User } = require('./../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const UserNotFoundError = require('../errors/UserNotFoundError');
 
-const SECRET_KEY='random_secret_key_123';
+const createToken = (id, email, userRole) => {
+    return jwt.sign(
+        {id, email, userRole}, 
+        process.env.SECRET_KEY,
+        {expiresIn: '24h'})
+}
 
 module.exports.createUser = async (req, res, next) => {
     try {
@@ -82,14 +88,12 @@ module.exports.updateOne = async (req, res, next) => {
 
 module.exports.registration = async (req, res, next) => {
     try {
-        const { firstName, lastName, email, password, birthday, gender, userRole } = req.body;
-        
-        const hashPassword = await bcrypt.hash(password, 5);
-        const user = await User.create({ firstName, lastName, email, birthday, gender, userRole, password: hashPassword });
-        const token = jwt.sign({
-            id: user.id, firstName, lastName, email, birthday, gender, userRole}, 
-            process.env.SECRET_KEY,
-            {expiresIn: '24h'})
+        const { body } = req;
+        console.log(body);
+        const hashPassword = await bcrypt.hash(body.password, 5);
+        const user = await User.create({ ...body, password: hashPassword });
+
+        const token = createToken(user.id, user.email, user.userRole);
         return res.json({token});
     } catch (error) {
         next(error)
@@ -98,9 +102,26 @@ module.exports.registration = async (req, res, next) => {
 
 module.exports.login = async (req, res, next) => {
     try {
-        
+        const {email, password} = req.body;
+        const user = await User.findOne({where: {email}});
+        if (!user) {
+            throw new UserNotFoundError();
+        }
+        let comparePassword = bcrypt.compareSync(password, user.password);
+        if (!comparePassword) {
+            throw new Error ('Указан неверный пароль')
+        }
+        const token = createToken(user.id, user.email, user.role);
+        return res.json({token});
     } catch (error) {
-        
+        next(error);
     }
+}
+
+module.exports.check = (req, res, next) => {
+    res.json('Все работает')
+    const { user } = req;
+    const token = createToken(user.id, user.email, user.role);
+    return res.json({token});
 }
 
