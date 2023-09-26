@@ -7,6 +7,8 @@ const { getGroupInstance } = require('../middlewares/group.mw');
 const userRouter = Router();
 
 userRouter.post('/', validateUser, UserController.createUser);
+
+userRouter.post('/registration', UserController.registration);
 userRouter.get('/', pagination, UserController.findAll);
 userRouter.get('/:userId', pagination, getUserInstance, UserController.findByPk);
 userRouter.delete('/:userId', UserController.deleteOne)
